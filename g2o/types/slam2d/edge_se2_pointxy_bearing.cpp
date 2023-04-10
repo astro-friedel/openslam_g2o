@@ -47,7 +47,7 @@ namespace g2o {
     const VertexSE2* v1 = static_cast<const VertexSE2*>(_vertices[0]);
     VertexPointXY* l2 = static_cast<VertexPointXY*>(_vertices[1]);
     SE2 t=v1->estimate();
-    t.setRotation(t.rotation().angle()+_measurement);
+    t.setRotation(Eigen::Rotation2D<double>(t.rotation().angle()+_measurement));
     Vector2d vr;
     vr[0]=r; vr[1]=0;
     l2->setEstimate(t*vr);

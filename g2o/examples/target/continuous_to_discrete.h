@@ -17,7 +17,7 @@ void continuousToDiscrete(MatrixType& Fd, MatrixType& Qd,
   };
 
   typedef Eigen::Matrix<typename MatrixType::Scalar,NX2,NX2> DoubleSizedMatrixType;
-  DoubleSizedMatrixType bigA(NX2,NX2), bigB(NX2,NX2);
+  DoubleSizedMatrixType bigA(NX2,NX2);
 
   // Construct the "big A matrix"
   bigA.template topLeftCorner<NX,NX>()=-Fc*dt;
@@ -26,8 +26,9 @@ void continuousToDiscrete(MatrixType& Fd, MatrixType& Qd,
   bigA.template bottomRightCorner<NX,NX>()=Fc.transpose() * dt;
 
   // bigB = expm(bigA)
-  Eigen::MatrixExponential<DoubleSizedMatrixType> me(bigA);
-  me.compute(bigB);
+  //Eigen::MatrixExponential<DoubleSizedMatrixType> me(bigA);
+  //me.compute(bigB);
+  Eigen::MatrixExponentialReturnValue bigB = bigA.exp();
 
   // Extract the discrete time components
   Fd = bigB.template bottomRightCorner<NX,NX>().transpose();
